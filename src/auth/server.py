@@ -20,3 +20,38 @@ def login():
         return "Missing credentials", 401
 
     # Check DB for user
+    cursor = mysql.connection.cursor()
+    result = cursor.execute(
+        f"SELECT email, password FROM user WHERE email={(auth.username,)}"
+    )
+
+    # Check result list to generate JWT or deny access
+    if result > 0:
+        user_row = cursor.fetchone()
+        email = user_row[0]
+        password = user_row[1]
+
+        if auth.username != email or auth.password != password:
+            return "Invalid credentials", 401
+        else:
+            return createJWT(auth.username, os.environ.get("JWT_SECRET"), True)
+
+    else:
+        return "Wrong username or password", 401
+
+
+def createJWT(username, secret, is_admin):
+    return jwt.encode(
+        {
+            "username": username,
+            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=1),
+            "iat": datetime.datetime.utcnow(),
+            "admin": is_admin,
+        },
+        secret,
+        algorithm="HS256",
+    )
+
+
+if __name__ == "__main__":
+    server.run(host="0.0.0.0", port=5050)

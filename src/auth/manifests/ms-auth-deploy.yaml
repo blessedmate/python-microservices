@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-auth
+  labels:
+    app: ms-auth
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-auth
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: ms-auth
+    spec:
+      containers:
+        - name: ms-auth
+          image: blessedmate/ms-auth:1.0.0
+          ports:
+            - containerPort: 5050
+          envFrom:
+            - configMapRef:
+                name: ms-auth-configmap
+            - secretRef:
+                name: ms-auth-secret

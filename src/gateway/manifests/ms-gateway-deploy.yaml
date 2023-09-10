@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ms-gateway
+  labels:
+    app: ms-gateway
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ms-gateway
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: ms-gateway
+    spec:
+      containers:
+        - name: ms-gateway
+          image: blessedmate/ms-gateway:1.0.0
+          envFrom:
+            - configMapRef:
+                name: ms-gateway-configmap
+            - secretRef:
+                name: ms-gateway-secret

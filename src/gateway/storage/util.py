@@ -2,6 +2,7 @@ import pika, json
 
 
 def upload(file, fs, channel, access):
+    """Uploads a video into the processing queue."""
     try:
         file_id = fs.put(file)
     except Exception as err:

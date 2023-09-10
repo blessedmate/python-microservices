@@ -1,9 +1,13 @@
+# Version of Kubernetes API
 apiVersion: apps/v1
+# Kind of object to create
 kind: Deployment
+# Data that uniquely identifies this object
 metadata:
   name: ms-auth
   labels:
     app: ms-auth
+# Desired state for the object
 spec:
   replicas: 2
   selector:

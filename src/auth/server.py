@@ -10,7 +10,7 @@ server.config["MYSQL_HOST"] = os.environ.get("MYSQL_HOST")
 server.config["MYSQL_USER"] = os.environ.get("MYSQL_USER")
 server.config["MYSQL_PASSWORD"] = os.environ.get("MYSQL_PASSWORD")
 server.config["MYSQL_DB"] = os.environ.get("MYSQL_DB")
-server.config["MYSQL_PORT"] = os.environ.get("MYSQL_PORT")
+server.config["MYSQL_PORT"] = int(os.environ.get("MYSQL_PORT"))
 
 
 @server.route("/login", methods=["POST"])
@@ -26,7 +26,7 @@ def login():
     # Check DB for user
     cursor = mysql.connection.cursor()
     result = cursor.execute(
-        f"SELECT email, password FROM user WHERE email={(auth.username,)}"
+        "SELECT email, password FROM user WHERE email=%s", (auth.username,)
     )
 
     # Check result list to generate JWT or deny access

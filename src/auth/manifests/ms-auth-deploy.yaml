@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: ms-auth
-          image: blessedmate/ms-auth:1.0.0
+          image: blessedmate/ms-auth:1.0.1
           ports:
             - containerPort: 5050
           envFrom:
